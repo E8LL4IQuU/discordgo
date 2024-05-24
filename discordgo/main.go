@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 
 	"log"
 	"fmt"
@@ -13,11 +12,6 @@ import (
 
 
 func main() {
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	token, exists := os.LookupEnv("TOKEN")
 	if !exists {

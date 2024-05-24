@@ -1,0 +1,8 @@
+# Avoid running not from project root(directory where compose.yaml is stored) as it causes docker to silently fail .env file load
+services:
+  discordgo:
+    build: ./discordgo
+    restart: ${DOCKER_RESTART_POLICY}
+    environment:
+      TOKEN: ${TOKEN}
+
