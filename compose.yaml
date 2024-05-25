@@ -5,4 +5,5 @@ services:
     restart: ${DOCKER_RESTART_POLICY}
     environment:
       TOKEN: ${TOKEN}
-
+    volumes:
+      - ./discordgo:/app

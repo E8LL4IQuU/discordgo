@@ -3,13 +3,12 @@ package main
 import (
 	"github.com/bwmarrin/discordgo"
 
-	"log"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 )
-
 
 func main() {
 
@@ -17,23 +16,35 @@ func main() {
 	if !exists {
 		log.Fatal("No token provided. Exiting")
 	}
-
-	sess, err := discordgo.New("Bot " + token)
+	session, err := discordgo.New("Bot " + token)
 	if err != nil {
 		log.Fatal("Error while initializing Discord session:", err)
 	}
-	sess.Open()
+	err = session.Open()
+	if err != nil {
+		log.Fatal("Error opening connection,", err)
+	}
 
 	fmt.Println("Joining whatsapp")
-	_, err = sess.ChannelVoiceJoin("468801766889357313", "778600399745712149", true, true)
+	_, err = session.ChannelVoiceJoin("468801766889357313", "778600399745712149", true, true)
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
+	session.AddHandler(messageCreate)
+
 	fmt.Println("Bot is now running. Press CTRL+C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
+	
+	defer session.Close()
+}
 
-	defer sess.Close()
+func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate) {
+	if message.Author.ID == session.State.User.ID {
+		return
+	}
+
+	session.ChannelMessageSend(message.ChannelID, "You're stupid")
 }

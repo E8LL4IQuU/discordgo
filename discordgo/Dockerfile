@@ -8,3 +8,4 @@ COPY . .
 
 RUN chmod +x /app/entrypoint.sh
 CMD ["sh", "entrypoint.sh"]
+
