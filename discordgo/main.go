@@ -53,6 +53,8 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 	}
 
 	if message.ChannelID != "845650803242958858" {
+		fmt.Println("Message outside currently watching channels")
+		fmt.Println(message.ChannelID)
 		return
 	}
 
@@ -83,16 +85,14 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 		Done      bool            `json:"done"`
 	}
 
-	// session.ChannelMessageSend(message.ChannelID, "You're stupid")
-	fmt.Println(message.Content)
+	fmt.Println(message.Author.Username + ": " + message.Content)
 
-	// FIXME: use llama3-text
 	payload := RequestPayload{
-		Model: "llama3",
+		Model: "llama3:text",
 		Messages: []Message{
 			{
 				Role:    "user",
-				Content: message.Content,
+				Content: "discord user(" + message.Author.Username + "): " + message.Content,
 			},
 		},
 		Stream: false,
@@ -110,6 +110,7 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 	if err != nil {
 		log.Fatal("Error creating request:", err)
 	}
+	fmt.Println(request)
 
 	request.Header.Set("Content-Type", "application/json")
 
@@ -140,4 +141,6 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 	}
 }
 
+// TODO: Typing status
+// TODO: Short-term memory
 // TODO: LLAVA
