@@ -7,3 +7,4 @@ services:
       TOKEN: ${TOKEN}
     volumes:
       - ./discordgo:/app
+    network_mode: host
