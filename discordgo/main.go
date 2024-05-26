@@ -52,6 +52,10 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 		return
 	}
 
+	if message.ChannelID != "845650803242958858" {
+		return
+	}
+
 	// Message represents the structure of the message in the JSON
 	type Message struct {
 		Role    string `json:"role"`
@@ -132,12 +136,7 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 		}
 
 		// Print the response
-		fmt.Printf("Model: %s\n", response.Model)
-		fmt.Printf("CreatedAt: %s\n", response.CreatedAt.Format(time.RFC3339))
-		fmt.Printf("Message Role: %s\n", response.Message.Role)
-		fmt.Printf("Message Content: %s\n", response.Message.Content)
-		fmt.Printf("Done: %v\n", response.Done)
-		fmt.Println()
+		session.ChannelMessageSend(message.ChannelID, response.Message.Content)
 	}
 }
 
