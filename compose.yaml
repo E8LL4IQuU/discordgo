@@ -7,4 +7,14 @@ services:
       TOKEN: ${TOKEN}
     volumes:
       - ./discordgo:/app
+    # FIXME: use internal docker network instead of exposing ports
     network_mode: host
+    depends_on:
+      - ollama
+  ollama:
+    build: ./ollama
+    restart: ${DOCKER_RESTART_POLICY}
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama:/root/.ollama

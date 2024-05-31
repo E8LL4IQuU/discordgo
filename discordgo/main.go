@@ -18,6 +18,39 @@ import (
 
 func main() {
 
+	type Payload struct {
+		Name string
+	}
+
+	payload := &Payload{
+		Name: "llama3",
+	}
+
+        jsonData, err := json.Marshal(payload)
+        if err != nil {
+                fmt.Println("Error marshalling JSON:", err)
+                return
+        }
+
+        url := "http://127.0.0.1:11434/api/pull"
+
+        request, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+        if err != nil {
+                log.Fatal("Error creating request:", err)
+        }
+        fmt.Println(request)
+
+        request.Header.Set("Content-Type", "application/json")
+
+        client := &http.Client{}
+        response, err := client.Do(request)
+        if err != nil {
+                log.Fatal("Error sending request:", err)
+        }
+
+        defer response.Body.Close()
+	// Defer execution until we get 200 OK
+
 	token, exists := os.LookupEnv("TOKEN")
 	if !exists {
 		log.Fatal("No token provided. Exiting")
@@ -88,7 +121,7 @@ func messageCreate(session *discordgo.Session, message *discordgo.MessageCreate)
 	fmt.Println(message.Author.Username + ": " + message.Content)
 
 	payload := RequestPayload{
-		Model: "llama3:text",
+		Model: "llama3",
 		Messages: []Message{
 			{
 				Role:    "user",

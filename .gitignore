@@ -22,3 +22,6 @@ go.work
 
 .env
 discordgo/main
+ollama/id_ed25519
+ollama/id_ed25519.pub
+ollama/models
